@@ -16,11 +16,7 @@
 #include <cmath>
 #include <assert.h>
 #include <set>
-
-// Again, "using namespace" in a header file is not conventionally a good idea,
-// but we use it here so that you may use things like size_t without having to
-// type std::size_t every time.
-using namespace std;
+namespace kd {
 
 template <size_t N, typename ElemType>
 class KDTree {
@@ -123,7 +119,7 @@ public:
      * in the KDTree nearest to v and returns k elmType found
      * value associated with those points.
      */
-    vector<ElemType> kNNValue(const Point<N>& key, size_t k) const;
+    std::vector<ElemType> kNNValue(const Point<N>& key, size_t k) const;
 
 private:
     /******************************************
@@ -317,7 +313,7 @@ void KDTree<N, ElemType>::insert(const Point<N>& pt, const ElemType& value) {
             currentNode = currentNode->rNodePtr;
         } else {
             //Should never get to this point in code
-            cout << "Error inserting elements into binary tree" << endl;
+            std::cout << "Error inserting elements into binary tree" << std::endl;
             return;
         }
     }
@@ -443,10 +439,10 @@ const Elemtype& KDTree<N, Elemtype>::at(const Point<N>& pt) const {
  * value associated with those points.
  */
 template<size_t N, typename ElemType>
-vector<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, size_t k) const {
+std::vector<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, size_t k) const {
     BoundedPQueue<Node*> nearestPQ(k);
     KNNValueRecurse(key, nearestPQ, root);
-    vector<ElemType> out;
+    std::vector<ElemType> out;
     while(!nearestPQ.empty()) {
         out.push_back((nearestPQ.dequeueMin())->value);
     }
@@ -505,5 +501,6 @@ ElemType KDTree<N, ElemType>::FindMostCommonValueInPQ(BoundedPQueue<Node*> neare
     return best;
 }
 
+}
 
 #endif // KDTREE_INCLUDED

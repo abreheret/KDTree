@@ -12,6 +12,8 @@
 
 #include <cmath>
 
+namespace kd {
+
 
 template <size_t N>
 class Point {
@@ -56,7 +58,7 @@ public:
      */
     iterator begin();
     iterator end();
-    
+
     const_iterator begin() const;
     const_iterator end() const;
 
@@ -149,7 +151,7 @@ double Distance(const Point<N>& one, const Point<N>& two) {
     double result = 0.0;
     for (size_t i = 0; i < N; ++i)
         result += (one[i] - two[i]) * (one[i] - two[i]);
-    
+
     return sqrt(result);
 }
 
@@ -167,4 +169,5 @@ bool operator!=(const Point<N>& one, const Point<N>& two) {
     return !(one == two);
 }
 
+}
 #endif // POINT_INCLUDED

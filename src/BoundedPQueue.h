@@ -35,7 +35,7 @@
  *
  * bpq.enqueue(elem, priority);
  *
- * Note that after enqueuing the element, there is no guarantee 
+ * Note that after enqueuing the element, there is no guarantee
  * that the value will actually be in the queue.  If the queue
  * is full and the new element's priority exceeds the largest
  * priority in the container, it will not be added.
@@ -59,7 +59,7 @@
 #include <algorithm>
 #include <limits>
 
-using namespace std;
+namespace kd {
 
 template <typename T>
 class BoundedPQueue {
@@ -105,7 +105,7 @@ public:
      */
     size_t size() const;
     bool empty() const;
-    
+
     /**
      * size_t maxSize() const;
      * Usage: size_t queueSize = bpq.maxSize();
@@ -114,7 +114,7 @@ public:
      * stored in the queue.
      */
     size_t maxSize() const;
-    
+
     /**
      * double best() const;
      * double worst() const;
@@ -138,7 +138,7 @@ private:
      * This class is layered on top of a multimap mapping from priorities
      * to elements with those priorities.
      */
-    multimap<double, T> elems;
+    std::multimap<double, T> elems;
     size_t maximumSize;
 };
 
@@ -162,11 +162,11 @@ BoundedPQueue<T>::BoundedPQueue(size_t maxSize) {
 template <typename T>
 void BoundedPQueue<T>::enqueue(const T& value, double priority) {
     // Add the element to the collection.
-    elems.insert(make_pair(priority, value));
+    elems.insert(std::make_pair(priority, value));
 
     // If there are too many elements in the queue, drop off the last one.
     if (size() > maxSize()) {
-        typename multimap<double, T>::iterator last = elems.end();
+        typename std::multimap<double, T>::iterator last = elems.end();
         --last; // Now points to highest-priority element
         elems.erase(last);
     }
@@ -180,10 +180,10 @@ template <typename T>
 T BoundedPQueue<T>::dequeueMin() {
     // Copy the best value.
     T result = elems.begin()->second;
-    
+
     // Remove it from the map.
     elems.erase(elems.begin());
-    
+
     return result;
 }
 
@@ -213,12 +213,13 @@ size_t BoundedPQueue<T>::maxSize() const {
  */
 template <typename T>
 double BoundedPQueue<T>::best() const {
-    return empty()? numeric_limits<double>::infinity() : elems.begin()->first;
+    return empty()? std::numeric_limits<double>::infinity() : elems.begin()->first;
 }
 
 template <typename T>
 double BoundedPQueue<T>::worst() const {
-    return empty()? numeric_limits<double>::infinity() : elems.rbegin()->first;
+    return empty()? std::numeric_limits<double>::infinity() : elems.rbegin()->first;
 }
 
+}
 #endif // BOUNDED_PQUEUE_INCLUDED
